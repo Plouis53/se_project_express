@@ -7,14 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint ."
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Plouis53/se_project_express.git"
   },
-  
   "author": "Phillippe Louis",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Plouis53/se_project_express/issues"
+  },
+  "homepage": "https://github.com/Plouis53/se_project_express#readme",
   "dependencies": {
     "express": "^4.18.2"
   },
