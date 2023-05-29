@@ -6,9 +6,9 @@ const app = express();
 
 mongoose.connect(
   "mongodb://localhost:27017/wtwr_db",
-  // (r) => {
-  //   console.log("connected to DB");
-  // },
+  (r) => {
+    console.log("connected to DB");
+  },
   (e) => console.log("DB Error", e)
 );
 

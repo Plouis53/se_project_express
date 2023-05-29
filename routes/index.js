@@ -4,7 +4,7 @@ const clothingItem = require("../models/clothingitem");
 
 router.use(" /items", clothingItem);
 
-router.use((req, res) => {
+router.use((_req, res) => {
   res.status(500).send({ message: "Routrer not found" });
 });
 
