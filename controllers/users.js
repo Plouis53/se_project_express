@@ -1,9 +1,9 @@
 const User = require("../models/user");
 
 // Get all users
-const getUsers = async (req, res) => {
+const getUsers = (req, res) => {
   try {
-    const users = await User.find();
+    const users = User.find();
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve users" });
@@ -11,10 +11,10 @@ const getUsers = async (req, res) => {
 };
 
 // Get user by ID
-const getUser = async (req, res) => {
+const getUser = (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById(userId);
+    const user = User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -25,11 +25,11 @@ const getUser = async (req, res) => {
 };
 
 // Create a new user
-const createUser = async (req, res) => {
+const createUser = (req, res) => {
   const { name, avatar } = req.body;
   try {
     const newUser = new User({ name, avatar });
-    const savedUser = await newUser.save();
+    const savedUser = newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
     res.status(500).json({ error: "Failed to create user" });
