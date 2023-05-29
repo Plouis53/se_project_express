@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
 // Get all users
-const getAllUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
 };
 
 // Get user by ID
-const getUserById = async (req, res) => {
+const getUser = async (req, res) => {
   const { userId } = req.params;
   try {
     const user = await User.findById(userId);
@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
 };
 
 module.exports = {
-  getAllUsers,
-  getUserById,
+  getUsers,
+  getUser,
   createUser,
 };
