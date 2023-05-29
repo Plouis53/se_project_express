@@ -1,4 +1,4 @@
-const ClothingItem = require("../models/clothingitem");
+const ClothingItem = require("../models/clothingItem");
 const User = require("../models/user");
 
 // Get all clothing items

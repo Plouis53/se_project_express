@@ -5,7 +5,8 @@ const {
   getItems,
   createItem,
   deleteItem,
-} = require("../controllers/clothingittems");
+} = require("../controllers/clothingItem");
+
 
 // GET /items - Get all clothing items
 router.get("/items", getItems);
