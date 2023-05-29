@@ -1,43 +1,75 @@
 const User = require("../models/user");
+const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
 
-// Get all users
-const getUsers = (req, res) => {
-  try {
-    const users = User.find();
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve users" });
+function handleCatchMethod(res, err) {
+  if (err.name === "ValidationError" || err.name === "AssertionError") {
+    return res.status(ERROR_400).send({
+      message:
+        "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+    });
   }
+  if (err.name === "CastError") {
+    return res.status(ERROR_404).send({
+      message:
+        "There is no user with the requested id, or the request was sent to a non-existent address.",
+    });
+  }
+  return res
+    .status(ERROR_500)
+    .send({ message: "An error has occurred on the server.", err });
+}
+
+const getUsers = (req, res) => {
+  User.find({})
+    .then((users) => res.status(201).send(users))
+    .catch((err) => {
+      handleCatchMethod(res, err);
+    });
 };
 
-// Get user by ID
 const getUser = (req, res) => {
   const { userId } = req.params;
-  try {
-    const user = User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve user" });
-  }
+
+  User.findById(userId)
+    .orFail()
+    .then((user) => res.status(201).send({ data: user }))
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        return res.status(ERROR_404).send({
+          message:
+            "There is no user with the requested id, or the request was sent to a non-existent address.",
+        });
+      }
+      if (
+        err.name === "ValidationError" ||
+        err.name === "AssertionError" ||
+        err.name === "CastError"
+      ) {
+        return res.status(ERROR_400).send({
+          message:
+            "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+        });
+      }
+      return res
+        .status(ERROR_500)
+        .send({ message: "An error has occurred on the server.", err });
+    });
 };
 
-// Create a new user
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
-  try {
-    const newUser = new User({ name, avatar });
-    const savedUser = newUser.save();
-    res.status(201).json(savedUser);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create user" });
-  }
+
+  User.create({ name, avatar })
+    .then((user) => {
+      res.send({ data: user });
+    })
+    .catch((err) => {
+      handleCatchMethod(res, err);
+    });
 };
 
 module.exports = {
-  getUsers,
   getUser,
+  getUsers,
   createUser,
 };
