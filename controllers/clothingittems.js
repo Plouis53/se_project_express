@@ -2,7 +2,7 @@ const ClothingItem = require("../models/clothingitem");
 const User = require("../models/user");
 
 // Get all clothing items
-const getAllItems = async (req, res) => {
+const getItems = async (req, res) => {
   try {
     const items = await ClothingItem.find();
     res.json(items);
@@ -36,7 +36,7 @@ const createItem = async (req, res) => {
 };
 
 // Delete clothing item by ID
-const deleteItemById = async (req, res) => {
+const deleteItem = async (req, res) => {
   const { itemId } = req.params;
   try {
     const deletedItem = await ClothingItem.findByIdAndDelete(itemId);
@@ -50,7 +50,7 @@ const deleteItemById = async (req, res) => {
 };
 
 module.exports = {
-  getAllItems,
+  getItems,
   createItem,
-  deleteItemById,
+  deleteItem,
 };
