@@ -2,9 +2,9 @@ const ClothingItem = require("../models/clothingitem");
 const User = require("../models/user");
 
 // Get all clothing items
-const getItems = async (req, res) => {
+const getItems = (req, res) => {
   try {
-    const items = await ClothingItem.find();
+    const items = ClothingItem.find();
     res.json(items);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve clothing items" });
@@ -12,12 +12,12 @@ const getItems = async (req, res) => {
 };
 
 // Create a new clothing item
-const createItem = async (req, res) => {
+const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   const ownerId = req.user._id; // Assuming user authentication is implemented
 
   try {
-    const owner = await User.findById(ownerId);
+    const owner = User.findById(ownerId);
     if (!owner) {
       return res.status(404).json({ error: "Owner not found" });
     }
@@ -28,7 +28,7 @@ const createItem = async (req, res) => {
       imageUrl,
       owner: ownerId,
     });
-    const savedItem = await newItem.save();
+    const savedItem = newItem.save();
     res.status(201).json(savedItem);
   } catch (error) {
     res.status(500).json({ error: "Failed to create clothing item" });
@@ -36,10 +36,10 @@ const createItem = async (req, res) => {
 };
 
 // Delete clothing item by ID
-const deleteItem = async (req, res) => {
+const deleteItem = (req, res) => {
   const { itemId } = req.params;
   try {
-    const deletedItem = await ClothingItem.findByIdAndDelete(itemId);
+    const deletedItem = ClothingItem.findByIdAndDelete(itemId);
     if (!deletedItem) {
       return res.status(404).json({ error: "Item not found" });
     }
