@@ -1,16 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllItems, createItem, deleteItemById } =
-  require("../controllers/clothingittems").default;
+const {
+  getItems,
+  createItem,
+  deleteItem,
+} = require("../controllers/clothingittems");
 
 // GET /items - Get all clothing items
-router.get("/items", getAllItems);
+router.get("/items", getItems);
 
 // POST /items - Create a new clothing item
 router.post("/items", createItem);
 
 // DELETE /items/:itemId - Delete clothing item by ID
-router.delete("/items/:itemId", deleteItemById);
+router.delete("/items/:itemId", deleteItem);
+
+// Handle non-existent resource
+router.use((req, res) => {
+  res.status(404).json({ message: "Requested resource not found" });
+});
 
 module.exports = router;
