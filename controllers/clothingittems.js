@@ -29,7 +29,7 @@ const createItem = (req, res) => {
       owner: ownerId,
     });
     const savedItem = newItem.save();
-    res.status(201).json(savedItem);
+    res.status(200).json(savedItem);
   } catch (error) {
     res.status(500).json({ error: "Failed to create clothing item" });
   }
