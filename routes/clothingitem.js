@@ -8,8 +8,8 @@ const {
   disLikeItem,
 } = require("../controllers/clothingItem");
 
-//CRUD
-//CREATE // POST /items - Create a new clothing item
+// CRUD
+// CREATE // POST /items - Create a new clothing item
 router.post("/items", createItem);
 // READ // GET /items - Get all clothing items
 router.get("/items", getItems);
