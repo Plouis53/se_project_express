@@ -3,7 +3,7 @@ const User=require("./user")
 
 const clothingItem = require("../models/clothingItem");
 
-router.use(" /items", clothingItem);
+router.use("/items", clothingItem);
 router.use("/users," User);
 
 router.use((_req, res) => {
