@@ -1,21 +1,28 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 
 const {
   getItems,
   createItem,
   deleteItem,
+  likeItem,
+  unlikeItem,
 } = require("../controllers/clothingItem");
 
+//CRUD
 
-// GET /items - Get all clothing items
-router.get("/items", getItems);
-
-// POST /items - Create a new clothing item
+//CREATE // POST /items - Create a new clothing item
 router.post("/items", createItem);
 
-// DELETE /items/:itemId - Delete clothing item by ID
+// READ // GET /items - Get all clothing items
+router.get("/items", getItems);
+
+// UPDATE // PUT /items/:itemId/likes - Like an item
+router.put("/items/:itemId/likes", likeItem);
+
+// DELETE // DELETE /items/:itemId - Delete clothing item by ID
 router.delete("/items/:itemId", deleteItem);
+// DELETE /items/:itemId/likes - Unlike an item
+router.delete("/items/:itemId/likes", unlikeItem);
 
 // Handle non-existent resource
 router.use((req, res) => {
