@@ -57,6 +57,7 @@ const getUser = (req, res) => {
 };
 
 const createUser = (req, res) => {
+  console.log(req);
   const { name, avatar } = req.body;
 
   User.create({ name, avatar })
