@@ -77,7 +77,7 @@ const likeItem = (req, res) => {
     });
 };
 
-const unlikeItem = (req, res) => {
+const disLikeItem = (req, res) => {
   const { itemId } = req.params;
 
   ClothingItem.findByIdAndUpdate(
@@ -103,5 +103,5 @@ module.exports = {
   createItem,
   deleteItem,
   likeItem,
-  unlikeItem,
+  disLikeItem,
 };

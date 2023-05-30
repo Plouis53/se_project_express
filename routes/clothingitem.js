@@ -5,7 +5,7 @@ const {
   createItem,
   deleteItem,
   likeItem,
-  unlikeItem,
+  disLikeItem,
 } = require("../controllers/clothingItem");
 
 //CRUD
@@ -22,7 +22,7 @@ router.put("/items/:itemId/likes", likeItem);
 // DELETE // DELETE /items/:itemId - Delete clothing item by ID
 router.delete("/items/:itemId", deleteItem);
 // DELETE /items/:itemId/likes - Unlike an item
-router.delete("/items/:itemId/likes", unlikeItem);
+router.delete("/items/:itemId/likes", disLikeItem);
 
 // Handle non-existent resource
 router.use((req, res) => {
