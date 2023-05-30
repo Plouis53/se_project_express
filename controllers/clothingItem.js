@@ -103,7 +103,7 @@ const likeItem = (req, res) => {
     });
 };
 
-const disLikeItem = (req, res) => {
+function disLikeItem(req, res) {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
@@ -114,7 +114,7 @@ const disLikeItem = (req, res) => {
     .catch((err) => {
       handleFindByIdItemError(req, res, err);
     });
-};
+}
 
 module.exports = {
   createItem,

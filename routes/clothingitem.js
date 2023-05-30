@@ -9,7 +9,7 @@ const {
   disLikeItem,
 } = require("../controllers/clothingItem");
 
-//CRUD//CREATE //- Create a new clothing item
+// CRUD//CREATE //- Create a new clothing item
 router.post("/items", createItem);
 // READ //- Get all clothing items
 router.get("/items", getItems);
