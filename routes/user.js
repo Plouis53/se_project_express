@@ -8,6 +8,6 @@ router.post("/", createUser);
 // GET / - Get all users
 router.get("/", getUsers);
 // GET /- Get user by ID
-router.get("/:itemId", getUser);
+router.get("/:userId", getUser);
 
 module.exports = router;

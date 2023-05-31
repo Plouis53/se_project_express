@@ -20,9 +20,9 @@ router.put("/:itemId", updateItem);
 router.delete("/items/:itemId", deleteItem);
 router.delete("/items/:itemId/likes", disLikeItem);
 
-// Handle non-existent resource
-router.use((req, res) => {
-  res.status(404).json({ message: "Requested resource not found" });
-});
+// // Handle non-existent resource
+// router.use((req, res) => {
+//   res.status(404).json({ message: "Requested resource not found" });
+// });
 
 module.exports = router;
