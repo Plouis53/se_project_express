@@ -34,6 +34,7 @@ const getUser = (req, res) => {
     .orFail()
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
+      console.log(err.name);
       if (err.name === "DocumentNotFoundError") {
         return res.status(ERROR_404).send({
           message:
