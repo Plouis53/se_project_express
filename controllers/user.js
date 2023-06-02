@@ -29,6 +29,7 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
   const { userId } = req.params;
+  console.log('---------------------')
   console.log(req.params);
   User.findById(userId)
     .orFail()

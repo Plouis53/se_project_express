@@ -10,9 +10,9 @@ const {
 } = require("../controllers/clothingItem");
 
 // CRUD//CREATE //- Create a new clothing item
-router.post("/items", createItem);
+router.post("/", createItem);
 // READ //- Get all clothing items
-router.get("/items", getItems);
+router.get("/", getItems);
 // UPDATE // - Like an item
 router.put("/items/:itemId/likes", likeItem);
 router.put("/:itemId", updateItem);
