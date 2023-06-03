@@ -2,7 +2,7 @@ const ClothingItem = require("../models/clothingItem");
 const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
 
 function handleRegularItemError(req, res, err) {
-  console.error(err)
+  console.error(err);
   if (err.name === "ValidationError" || err.name === "AssertionError") {
     return res.status(ERROR_400).send({
       message:
@@ -43,7 +43,7 @@ function handleFindByIdItemError(req, res, err) {
 }
 
 const createItem = (req, res) => {
-  console.log(req);
+  console.log("HERE", req.body.imageUrl);
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
@@ -51,7 +51,7 @@ const createItem = (req, res) => {
       res.send({ data: item });
     })
     .catch((err) => {
-      console.error(err)
+      console.error(err);
       handleRegularItemError(req, res, err);
     });
 };
@@ -115,7 +115,7 @@ function disLikeItem(req, res) {
     .orFail()
     .then((item) => res.status(200).send({ data: item }))
     .catch((err) => {
-      console.error(err)
+      console.error(err);
       handleFindByIdItemError(req, res, err);
     });
 }
