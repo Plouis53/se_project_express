@@ -21,7 +21,7 @@ function handleCatchMethod(res, err) {
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.send(users))
     .catch((err) => {
       handleCatchMethod(res, err);
     });
@@ -32,7 +32,7 @@ const getUser = (req, res) => {
 
   User.findById(userId)
     .orFail()
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === "DocumentNotFoundError") {
         return res.status(ERROR_404).send({
