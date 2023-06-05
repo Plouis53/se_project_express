@@ -3,7 +3,7 @@ The back-end project is focused on creating a server for the WTWR application. Y
 
 ## Function
 This project serves as the back-end component of the WTWR application. It involves the development of an API with carefully configured URL routes. Additionally, a MongoDB database is created and appropriately configured to store and manage the application's data.
-By building the back-end infrastructure, the project enables seamless communication between the front-end and the server, allowing for efficient data retrieval, storage, and manipulation
+By building the back-end infrastructure, the project enables seamless communication between the front-end and the server, allowing for efficient data retrieval, storage, and manipulation.
 
 ## Techniques and Technologies
 Controllers serve as the destination for handling requests by containing a collection of request handler functions. Models are utilized to define and store schemas, which represent the structure and organization of data. Routes play a crucial role in managing the exchange of data between the user and the server, facilitating the transmission of webpages and receiving user input.
