@@ -80,25 +80,11 @@ const deleteItem = (req, res) => {
   const { itemId } = req.params;
   console.log("HERE", req.params.itemId);
 
-  //   ClothingItem.findByIdAndDelete(itemId)
-  //     .orFail()
-  //     .then(() =>
-  //       res.send({ message: `The item has been successfully deleted.` })
-  //     )
-  //     .catch((err) => {
-  //       handleFindByIdItemError(req, res, err);
-  //     });
-  // };
-
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then(() => {
-      {
-        return res
-          .status(200)
-          .send({ message: `The item has been successfully deleted.` });
-      }
-    })
+    .then(() =>
+      res.send({ message: `The item has been successfully deleted.` })
+    )
     .catch((err) => {
       handleFindByIdItemError(req, res, err);
     });
