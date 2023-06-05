@@ -2,21 +2,21 @@ const User = require("../models/user");
 const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
 
 function handleCatchMethod(res, err) {
-  if (err.name === "ValidationError" || err.name === "AssertionError") {
+  if (err.name === "ValidationError") {
     return res.status(ERROR_400).send({
       message:
         "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
     });
   }
   if (err.name === "CastError") {
-    return res.status(ERROR_404).send({
+    return res.status(ERROR_400).send({
       message:
-        "There is no user with the requested id, or the request was sent to a non-existent address.",
+        "Invalid ID passed to the params. There is no user with the requested id, or the request was sent to a non-existent address.",
     });
   }
   return res
     .status(ERROR_500)
-    .send({ message: "An error has occurred on the server.", err });
+    .send({ message: "An error has occurred on the server." });
 }
 
 const getUsers = (req, res) => {
@@ -29,24 +29,18 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
   const { userId } = req.params;
-  console.log('---------------------')
-  console.log(req.params);
+
   User.findById(userId)
     .orFail()
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      console.log(err.name);
       if (err.name === "DocumentNotFoundError") {
         return res.status(ERROR_404).send({
           message:
             "There is no user with the requested id, or the request was sent to a non-existent address.",
         });
       }
-      if (
-        err.name === "ValidationError" ||
-        err.name === "AssertionError" ||
-        err.name === "CastError"
-      ) {
+      if (err.name === "ValidationError") {
         return res.status(ERROR_400).send({
           message:
             "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
@@ -54,12 +48,11 @@ const getUser = (req, res) => {
       }
       return res
         .status(ERROR_500)
-        .send({ message: "An error has occurred on the server.", err });
+        .send({ message: "An error has occurred on the server." });
     });
 };
 
 const createUser = (req, res) => {
-  console.log(req);
   const { name, avatar } = req.body;
 
   User.create({ name, avatar })
