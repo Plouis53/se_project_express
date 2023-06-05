@@ -10,14 +10,14 @@ function handleRegularItemError(req, res, err) {
     });
   }
   if (err.name === "CastError") {
-    return res.status(ERROR_404).send({
+    return res.status(ERROR_400).send({
       message:
-        "There is no clothing item with the requested id, or the request was sent to a non-existent address.",
+        "Invalid ID passed to the params. There is no clothing item with the requested id, or the request was sent to a non-existent address.",
     });
   }
   return res
     .status(ERROR_500)
-    .send({ message: "An error has occurred on the server", err });
+    .send({ message: "An error has occurred on the server" });
 }
 
 function handleFindByIdItemError(req, res, err) {
@@ -39,7 +39,7 @@ function handleFindByIdItemError(req, res, err) {
   }
   return res
     .status(ERROR_500)
-    .send({ message: "An error has occurred on the server", err });
+    .send({ message: "An error has occurred on the server" });
 }
 
 const createItem = (req, res) => {
@@ -106,7 +106,7 @@ const likeItem = (req, res) => {
     });
 };
 
-function disLikeItem(req, res) {
+const disLikeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
@@ -118,7 +118,7 @@ function disLikeItem(req, res) {
       console.error(err);
       handleFindByIdItemError(req, res, err);
     });
-}
+};
 
 module.exports = {
   createItem,
