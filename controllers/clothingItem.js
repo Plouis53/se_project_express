@@ -58,7 +58,7 @@ const createItem = (req, res) => {
 
 const getItems = (req, res) => {
   ClothingItem.find({})
-    .then((items) => res.status(200).send(items))
+    .then((items) => res.send(items))
     .catch((err) => {
       handleRegularItemError(req, res, err);
     });
@@ -70,7 +70,7 @@ const updateItem = (req, res) => {
 
   ClothingItem.findOneAndUpdate(itemId, { $set: { imageUrl } })
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => res.send({ data: item }))
     .catch((err) => {
       handleRegularItemError(req, res, err);
     });
@@ -82,9 +82,7 @@ const deleteItem = (req, res) => {
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then(() =>
-      res
-        .status(200)
-        .send({ message: `The item has been successfully deleted.` })
+      res.send({ message: `The item has been successfully deleted.` })
     )
     .catch((err) => {
       handleFindByIdItemError(req, res, err);
@@ -98,9 +96,7 @@ const likeItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then(() =>
-      res.status(200).send({ message: "Item has successfully been liked" })
-    )
+    .then(() => res.send({ message: "Item has successfully been liked" }))
     .catch((err) => {
       handleFindByIdItemError(req, res, err);
     });
@@ -113,7 +109,7 @@ const disLikeItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => res.send({ data: item }))
     .catch((err) => {
       console.error(err);
       handleFindByIdItemError(req, res, err);
