@@ -1,6 +1,9 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { ERROR_400, ERROR_500 } = require("../utils/errors");
+const { JWT_SECRET } = require("../utils/config");
+const jwt = require("jsonwebtoken");
+const { ERROR_401 } = require("../utils/errors");
 
 function handleCatchMethod(res, err) {
   if (err.name === "ValidationError") {
@@ -36,8 +39,55 @@ const createUser = (req, res) => {
           return newUser.save();
         })
         .then((createdUser) => {
-          res.status(201).json(createdUser);
+          // Generate JWT token
+          const token = jwt.sign({ _id: createdUser._id }, JWT_SECRET, {
+            expiresIn: "7d",
+          });
+
+          res.status(201).json({ token });
         });
+      // return bcrypt
+      //   .hash(password, 10)
+      //   .then((hashedPassword) => {
+      //     const newUser = new User({
+      //       name,
+      //       avatar,
+      //       email,
+      //       password: hashedPassword,
+      //     });
+
+      //     return newUser.save();
+      //   })
+      //   .then((createdUser) => {
+      //     res.status(201).json(createdUser);
+      //   });
+    })
+    .catch((err) => {
+      handleCatchMethod(res, err);
+    });
+};
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return res.status(ERROR_401).json({ error: "Invalid credentials" });
+      }
+
+      return bcrypt.compare(password, user.password).then((isMatch) => {
+        if (!isMatch) {
+          return res.status(ERROR_401).json({ error: "Invalid credentials" });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+          expiresIn: "7d",
+        });
+
+        res.json({ token });
+      });
     })
     .catch((err) => {
       handleCatchMethod(res, err);
@@ -46,6 +96,7 @@ const createUser = (req, res) => {
 
 module.exports = {
   createUser,
+  login,
 };
 
 // const User = require("../models/user");
