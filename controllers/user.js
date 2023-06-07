@@ -1,21 +1,13 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
+const {
+  ERROR_400,
+  ERROR_404,
+  ERROR_500,
+  ERROR_401,
+} = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 const jwt = require("jsonwebtoken");
-const { ERROR_401 } = require("../utils/errors");
-
-// function handleCatchMethod(res, err) {
-//   if (err.name === "ValidationError") {
-//     return res.status(ERROR_400).send({
-//       message:
-//         "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
-//     });
-//   }
-//   return res
-//     .status(ERROR_500)
-//     .send({ message: "An error has occurred on the server." });
-// }
 
 const getCurrentUser = (req, res) => {
   const userId = req.user._id;
@@ -61,24 +53,17 @@ const createUser = (req, res) => {
 
           res.status(201).json({ token });
         });
-      // return bcrypt
-      //   .hash(password, 10)
-      //   .then((hashedPassword) => {
-      //     const newUser = new User({
-      //       name,
-      //       avatar,
-      //       email,
-      //       password: hashedPassword,
-      //     });
-
-      //     return newUser.save();
-      //   })
-      //   .then((createdUser) => {
-      //     res.status(201).json(createdUser);
-      //   });
     })
     .catch((err) => {
-      handleCatchMethod(res, err);
+      if (err.name === "ValidationError") {
+        return res.status(ERROR_400).send({
+          message:
+            "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+        });
+      }
+      return res.status(ERROR_500).send({
+        message: "An error has occurred on the server.",
+      });
     });
 };
 
@@ -105,7 +90,15 @@ const login = (req, res) => {
       });
     })
     .catch((err) => {
-      handleCatchMethod(res, err);
+      if (err.name === "ValidationError") {
+        return res.status(ERROR_400).send({
+          message:
+            "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+        });
+      }
+      return res.status(ERROR_500).send({
+        message: "An error has occurred on the server.",
+      });
     });
 };
 
@@ -114,6 +107,18 @@ module.exports = {
   createUser,
   login,
 };
+
+// function handleCatchMethod(res, err) {
+//   if (err.name === "ValidationError") {
+//     return res.status(ERROR_400).send({
+//       message:
+//         "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+//     });
+//   }
+//   return res
+//     .status(ERROR_500)
+//     .send({ message: "An error has occurred on the server." });
+// }
 
 // const User = require("../models/user");
 // const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
