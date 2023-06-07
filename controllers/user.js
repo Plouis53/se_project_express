@@ -29,9 +29,7 @@ const createUser = (req, res) => {
 
 const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
-    .orFail(() => {
-      return handleOnFailError();
-    })
+    .orFail(() => handleOnFailError())
     .then((user) => res.status(200).send({ data: user }))
     .catch((error) => {
       handleErrorResponse(error, res);
@@ -45,9 +43,7 @@ const updateCurrentUser = (req, res) => {
     { name, avatar },
     { new: true, runValidators: true }
   )
-    .orFail(() => {
-      return handleOnFailError();
-    })
+    .orFail(() => handleOnFailError())
     .then((user) => {
       res.status(200).send(user);
     })

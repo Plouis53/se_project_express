@@ -12,12 +12,12 @@ const {
 // CRUDE
 
 // POST / - Create a new user
-//router.post("/", createUser);
+// router.post("/", createUser);
 
 // GET / - Get all users
 // router.get("/", getUsers);
 // GET /- Get user by ID
-//router.get("/:userId", getUser);
+// router.get("/:userId", getUser);
 router.get("/me", auth, getCurrentUser);
 
 // UPDATE
