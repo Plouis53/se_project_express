@@ -6,11 +6,7 @@ const { PORT = 3001 } = process.env;
 const app = express();
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (error) => {
-  if (error) {
-    console.log("Failed to connect to the database:", error);
-  } else {
-    console.log("Connected to the database");
-  }
+  console.log("Connected to the database");
 });
 
 const routes = require("./routes");
@@ -21,6 +17,7 @@ app.use(routes);
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
+  console.log("This is working");
 });
 
 // const express = require("express");
