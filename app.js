@@ -17,7 +17,7 @@ app.use(routes);
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
-  console.log("This is working");
+  console.log("Working");
 });
 
 // const express = require("express");
