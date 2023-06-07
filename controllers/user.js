@@ -1,21 +1,36 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
-const { ERROR_400, ERROR_500 } = require("../utils/errors");
+const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 const jwt = require("jsonwebtoken");
 const { ERROR_401 } = require("../utils/errors");
 
-function handleCatchMethod(res, err) {
-  if (err.name === "ValidationError") {
-    return res.status(ERROR_400).send({
-      message:
-        "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+// function handleCatchMethod(res, err) {
+//   if (err.name === "ValidationError") {
+//     return res.status(ERROR_400).send({
+//       message:
+//         "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
+//     });
+//   }
+//   return res
+//     .status(ERROR_500)
+//     .send({ message: "An error has occurred on the server." });
+// }
+
+const getCurrentUser = (req, res) => {
+  const userId = req.user._id;
+
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(ERROR_404).json({ error: "User not found" });
+      }
+      res.json(user);
+    })
+    .catch((error) => {
+      res.status(ERROR_500).json({ error: "Internal server error" });
     });
-  }
-  return res
-    .status(ERROR_500)
-    .send({ message: "An error has occurred on the server." });
-}
+};
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -95,6 +110,7 @@ const login = (req, res) => {
 };
 
 module.exports = {
+  getCurrentUser,
   createUser,
   login,
 };

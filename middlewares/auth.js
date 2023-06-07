@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../utils/config");
 const { ERROR_401 } = require("../utils/errors");
 
-const authMiddleware = (req, res, next) => {
+module.exports.authorization = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
@@ -19,5 +19,3 @@ const authMiddleware = (req, res, next) => {
     return res.status(ERROR_401).json({ error: "Unauthorized" });
   }
 };
-
-module.exports = authMiddleware;
