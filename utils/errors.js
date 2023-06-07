@@ -14,18 +14,18 @@ const handleOnFailError = () => {
   throw error;
 };
 
-const handleErrorResponse = (error, res) => {
-  if (error.name === "ValidationError" || error.name === "CastError") {
+const handleErrorResponse = (err, res) => {
+  if (err.name === "ValidationError" || err.name === "CastError") {
     res
       .status(errorStatusCodes.badRequest)
       .send({ message: "Bad Request, Invalid input" });
-  } else if (error.message === "Incorrect email or password") {
+  } else if (err.message === "Incorrect email or password") {
     res
       .status(errorStatusCodes.unauthorized)
       .send({ message: "You are not authorized to do this" });
-  } else if (error.statusCode === errorStatusCodes.notFound) {
+  } else if (err.statusCode === errorStatusCodes.notFound) {
     res.status(errorStatusCodes.notFound).send({ message: "Item not found" });
-  } else if (error.code === errorStatusCodes.mongoError) {
+  } else if (err.code === errorStatusCodes.mongoError) {
     res.status(errorStatusCodes.conflict).send({
       message: "Email address is already being used, please try another email.",
     });
