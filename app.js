@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 const { PORT = 3001 } = process.env;
 const app = express();
 
-mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (error) => {
-  console.log("Connected to the database");
+mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (r) => {
+  console.log("Connected to the database", r);
 });
 
 const routes = require("./routes");

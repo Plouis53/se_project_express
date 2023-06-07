@@ -11,7 +11,8 @@ const {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  bcrypt.hash(password, 10)
+  bcrypt
+    .hash(password, 10)
     .then((hash) => {
       User.create({ name, avatar, email, password: hash })
         .then((user) => {
@@ -19,10 +20,10 @@ const createUser = (req, res) => {
           delete userData.password;
           return res.status(201).send({ data: userData });
         })
-        .catch((err) => handleErrorResponse(err, res));
+        .catch((error) => handleErrorResponse(error, res));
     })
-    .catch((err) => {
-      handleErrorResponse(err, res);
+    .catch((error) => {
+      handleErrorResponse(error, res);
     });
 };
 
@@ -32,8 +33,8 @@ const getCurrentUser = (req, res) => {
       return handleOnFailError();
     })
     .then((user) => res.status(200).send({ data: user }))
-    .catch((err) => {
-      handleErrorResponse(err, res);
+    .catch((error) => {
+      handleErrorResponse(error, res);
     });
 };
 
@@ -50,8 +51,8 @@ const updateCurrentUser = (req, res) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch((err) => {
-      handleErrorResponse(err, res);
+    .catch((error) => {
+      handleErrorResponse(error, res);
     });
 };
 
@@ -69,10 +70,10 @@ const login = (req, res) => {
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       });
     })
-    .catch((err) => {
-      console.log(err);
-      console.log(err.name);
-      handleErrorResponse(err, res);
+    .catch((error) => {
+      console.log(error);
+      console.log(error.name);
+      handleErrorResponse(error, res);
     });
 };
 
@@ -82,7 +83,6 @@ module.exports = {
   updateCurrentUser,
   login,
 };
-
 
 // function handleCatchMethod(res, err) {
 //   if (err.name === "ValidationError") {
