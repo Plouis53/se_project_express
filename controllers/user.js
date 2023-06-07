@@ -11,28 +11,23 @@ const {
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  bcrypt
-    .hash(password, 10)
-    .then((hash) => {
-      User.create({ name, avatar, email, password: hash })
-        .then((user) => {
-          const userData = user.toObject();
-          delete userData.password;
-          return res.status(201).send({ data: userData });
-        })
-        .catch((error) => handleErrorResponse(error, res));
-    })
-    .catch((error) => {
-      handleErrorResponse(error, res);
-    });
+  bcrypt.hash(password, 10).then((hash) => {
+    User.create({ name, avatar, email, password: hash })
+      .then((user) => {
+        const userData = user.toObject();
+        delete userData.password;
+        return res.status(201).send({ data: userData });
+      })
+      .catch((err) => handleErrorResponse(err, res));
+  });
 };
 
 const getCurrentUser = (req, res) => {
   User.findById(req.user._id)
     .orFail(() => handleOnFailError())
     .then((user) => res.status(200).send({ data: user }))
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
@@ -47,8 +42,8 @@ const updateCurrentUser = (req, res) => {
     .then((user) => {
       res.status(200).send(user);
     })
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
@@ -66,10 +61,10 @@ const login = (req, res) => {
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       });
     })
-    .catch((error) => {
-      console.log(error);
-      console.log(error.name);
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      console.log(err);
+      console.log(err.name);
+      handleErrorResponse(err, res);
     });
 };
 
