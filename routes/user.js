@@ -6,12 +6,14 @@ const {
   // getUsers,
   // createUser,
   getCurrentUser,
-  updateUserProfile,
+  updateCurrentUser,
 } = require("../controllers/user");
 
 // CRUDE
+
 // POST / - Create a new user
 //router.post("/", createUser);
+
 // GET / - Get all users
 // router.get("/", getUsers);
 // GET /- Get user by ID
@@ -19,6 +21,6 @@ const {
 router.get("/me", auth, getCurrentUser);
 
 // UPDATE
-router.patch("/me", auth, updateUserProfile);
+router.patch("/me", auth, updateCurrentUser);
 
 module.exports = router;
