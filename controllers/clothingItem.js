@@ -30,9 +30,7 @@ const updateItem = (req, res) => {
   const { imageUrl } = req.body;
 
   ClothingItem.findOneAndUpdate({ _id: itemId }, { $set: { imageUrl } })
-    .orFail(() => {
-      return handleOnFailError();
-    })
+    .orFail(() => handleOnFailError())
     .then((item) => res.status(200).send({ data: item }))
     .catch((error) => {
       handleErrorResponse(error, res);
@@ -43,9 +41,7 @@ const deleteItem = (req, res) => {
   const { itemId } = req.params;
 
   ClothingItem.findById(itemId)
-    .orFail(() => {
-      return handleOnFailError();
-    })
+    .orFail(() => handleOnFailError())
     .then((item) => {
       if (String(item.owner) !== req.user._id) {
         return res
@@ -56,6 +52,7 @@ const deleteItem = (req, res) => {
         res.send({ message: "Item deleted" });
       });
     })
+
     .catch((error) => {
       if (error.statusCode === errorStatusCodes.notFound) {
         res
@@ -81,9 +78,7 @@ const likeItem = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true }
   )
-    .orFail(() => {
-      return handleOnFailError();
-    })
+    .orFail(() => handleOnFailError())
     .then(() =>
       res.status(200).send({ message: "Item has successfully been liked" })
     )
@@ -100,9 +95,7 @@ const disLikeItem = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true }
   )
-    .orFail(() => {
-      return handleOnFailError();
-    })
+    .orFail(() => handleOnFailError())
     .then((item) => res.status(200).send({ data: item }))
     .catch((error) => {
       handleErrorResponse(error, res);
