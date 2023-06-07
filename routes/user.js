@@ -6,7 +6,7 @@ const {
   // getUsers,
   // createUser,
   getCurrentUser,
-  updateCurrentUser,
+  updateUserProfile,
 } = require("../controllers/user");
 
 // CRUDE
@@ -19,6 +19,6 @@ const {
 router.get("/me", auth, getCurrentUser);
 
 // UPDATE
-router.patch("/me", auth, updateCurrentUser);
+router.patch("/me", auth, updateUserProfile);
 
 module.exports = router;

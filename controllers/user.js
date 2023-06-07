@@ -24,6 +24,29 @@ const getCurrentUser = (req, res) => {
     });
 };
 
+const updateUserProfile = (req, res) => {
+  const userId = req.user._id;
+  const { name, avatar } = req.body;
+
+  User.findByIdAndUpdate(
+    userId,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .then((updatedUser) => {
+      if (!updatedUser) {
+        return res.status(ERROR_404).json({ error: "User not found" });
+      }
+      res.json(updatedUser);
+    })
+    .catch((error) => {
+      if (error.name === "ValidationError") {
+        return res.status(ERROR_400).json({ error: error.message });
+      }
+      res.status(ERROR_500).json({ error: "Internal server error" });
+    });
+};
+
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
@@ -104,6 +127,7 @@ const login = (req, res) => {
 
 module.exports = {
   getCurrentUser,
+  updateUserProfile,
   createUser,
   login,
 };
