@@ -12,16 +12,16 @@ const createItem = (req, res) => {
     .then((item) => {
       res.send({ data: item });
     })
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
 const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
@@ -32,8 +32,8 @@ const updateItem = (req, res) => {
   ClothingItem.findOneAndUpdate({ _id: itemId }, { $set: { imageUrl } })
     .orFail(() => handleOnFailError())
     .then((item) => res.status(200).send({ data: item }))
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
@@ -53,12 +53,12 @@ const deleteItem = (req, res) => {
       });
     })
 
-    .catch((error) => {
-      if (error.statusCode === errorStatusCodes.notFound) {
+    .catch((err) => {
+      if (err.statusCode === errorStatusCodes.notFound) {
         res
           .status(errorStatusCodes.notFound)
           .send({ message: "Item not found" });
-      } else if (error.name === "CastError") {
+      } else if (err.name === "CastError") {
         res
           .status(errorStatusCodes.badRequest)
           .send({ message: "Bad Request and/or invalid input" });
@@ -82,8 +82,8 @@ const likeItem = (req, res) => {
     .then(() =>
       res.status(200).send({ message: "Item has successfully been liked" })
     )
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
@@ -97,8 +97,8 @@ const disLikeItem = (req, res) => {
   )
     .orFail(() => handleOnFailError())
     .then((item) => res.status(200).send({ data: item }))
-    .catch((error) => {
-      handleErrorResponse(error, res);
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
