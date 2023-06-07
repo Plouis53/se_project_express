@@ -14,7 +14,7 @@ const handleOnFailError = () => {
   throw error;
 };
 
-const handleError = (error, res) => {
+const handleErrorResponse = (error, res) => {
   if (error.name === "ValidationError" || error.name === "CastError") {
     res
       .status(errorStatusCodes.badRequest)
@@ -39,7 +39,7 @@ const handleError = (error, res) => {
 module.exports = {
   errorStatusCodes,
   handleOnFailError,
-  handleError,
+  handleErrorResponse,
 };
 
 // const ERROR_400 = 400;

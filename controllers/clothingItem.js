@@ -1,7 +1,7 @@
 const ClothingItem = require("../models/clothingItem");
 const {
   handleOnFailError,
-  handleError,
+  handleErrorResponse,
   errorStatusCodes,
 } = require("../utils/errors");
 
@@ -13,7 +13,7 @@ const createItem = (req, res) => {
       res.send({ data: item });
     })
     .catch((error) => {
-      handleError(error, res);
+      handleErrorResponse(error, res);
     });
 };
 
@@ -21,7 +21,7 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
     .catch((error) => {
-      handleError(error, res);
+      handleErrorResponse(error, res);
     });
 };
 
@@ -35,7 +35,7 @@ const updateItem = (req, res) => {
     })
     .then((item) => res.status(200).send({ data: item }))
     .catch((error) => {
-      handleError(error, res);
+      handleErrorResponse(error, res);
     });
 };
 
@@ -88,7 +88,7 @@ const likeItem = (req, res) => {
       res.status(200).send({ message: "Item has successfully been liked" })
     )
     .catch((error) => {
-      handleError(error, res);
+      handleErrorResponse(error, res);
     });
 };
 
@@ -105,7 +105,7 @@ const disLikeItem = (req, res) => {
     })
     .then((item) => res.status(200).send({ data: item }))
     .catch((error) => {
-      handleError(error, res);
+      handleErrorResponse(error, res);
     });
 };
 

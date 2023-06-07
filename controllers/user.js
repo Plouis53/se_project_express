@@ -1,136 +1,88 @@
-const User = require("../models/user");
-const bcrypt = require("bcrypt");
-const {
-  ERROR_400,
-  ERROR_404,
-  ERROR_500,
-  ERROR_401,
-} = require("../utils/errors");
-const { JWT_SECRET } = require("../utils/config");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
-const getCurrentUser = (req, res) => {
-  const userId = req.user._id;
-
-  User.findById(userId)
-    .then((user) => {
-      if (!user) {
-        return res.status(ERROR_404).json({ error: "User not found" });
-      }
-      res.json(user);
-    })
-    .catch((error) => {
-      res.status(ERROR_500).json({ error: "Internal server error" });
-    });
-};
-
-const updateUserProfile = (req, res) => {
-  const userId = req.user._id;
-  const { name, avatar } = req.body;
-
-  User.findByIdAndUpdate(
-    userId,
-    { name, avatar },
-    { new: true, runValidators: true }
-  )
-    .then((updatedUser) => {
-      if (!updatedUser) {
-        return res.status(ERROR_404).json({ error: "User not found" });
-      }
-      res.json(updatedUser);
-    })
-    .catch((error) => {
-      if (error.name === "ValidationError") {
-        return res.status(ERROR_400).json({ error: error.message });
-      }
-      res.status(ERROR_500).json({ error: "Internal server error" });
-    });
-};
+const User = require("../models/user");
+const { JWT_SECRET } = require("../utils/config");
+const {
+  handleOnFailError,
+  handleErrorResponse,
+  errorStatusCodes,
+} = require("../utils/errors");
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
 
-  User.findOne({ email })
-    .then((existingUser) => {
-      if (existingUser) {
-        return res.status(ERROR_400).json({ error: "Email already exists" });
-      }
-
-      return bcrypt
-        .hash(password, 10)
-        .then((hashedPassword) => {
-          const newUser = new User({
-            name,
-            avatar,
-            email,
-            password: hashedPassword,
-          });
-
-          return newUser.save();
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+      User.create({ name, avatar, email, password: hash })
+        .then((user) => {
+          const userData = user.toObject();
+          delete userData.password;
+          return res.status(201).send({ data: userData });
         })
-        .then((createdUser) => {
-          // Generate JWT token
-          const token = jwt.sign({ _id: createdUser._id }, JWT_SECRET, {
-            expiresIn: "7d",
-          });
-
-          res.status(201).json({ token });
-        });
+        .catch((err) => handleErrorResponse(err, res));
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(ERROR_400).send({
-          message:
-            "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
-        });
-      }
-      return res.status(ERROR_500).send({
-        message: "An error has occurred on the server.",
-      });
+      handleErrorResponse(err, res);
+    });
+};
+
+const getCurrentUser = (req, res) => {
+  User.findById(req.user._id)
+    .orFail(() => {
+      return handleOnFailError();
+    })
+    .then((user) => res.status(200).send({ data: user }))
+    .catch((err) => {
+      handleErrorResponse(err, res);
+    });
+};
+
+const updateCurrentUser = (req, res) => {
+  const { name, avatar } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, avatar },
+    { new: true, runValidators: true }
+  )
+    .orFail(() => {
+      return handleOnFailError();
+    })
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      handleErrorResponse(err, res);
     });
 };
 
 const login = (req, res) => {
   const { email, password } = req.body;
 
-  User.findOne({ email })
+  if (!email || !password) {
+    return res
+      .status(errorStatusCodes.unauthorized)
+      .send({ message: "You are not authorized to do this" });
+  }
+  return User.findUserByCredentials(email, password)
     .then((user) => {
-      if (!user) {
-        return res.status(ERROR_401).json({ error: "Invalid credentials" });
-      }
-
-      return bcrypt.compare(password, user.password).then((isMatch) => {
-        if (!isMatch) {
-          return res.status(ERROR_401).json({ error: "Invalid credentials" });
-        }
-
-        // Generate JWT token
-        const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-          expiresIn: "7d",
-        });
-
-        res.json({ token });
+      res.send({
+        token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(ERROR_400).send({
-          message:
-            "Invalid data passed to the methods for creating a user or invalid ID passed to the params.",
-        });
-      }
-      return res.status(ERROR_500).send({
-        message: "An error has occurred on the server.",
-      });
+      console.log(err);
+      console.log(err.name);
+      handleErrorResponse(err, res);
     });
 };
 
 module.exports = {
-  getCurrentUser,
-  updateUserProfile,
   createUser,
+  getCurrentUser,
+  updateCurrentUser,
   login,
 };
+
 
 // function handleCatchMethod(res, err) {
 //   if (err.name === "ValidationError") {

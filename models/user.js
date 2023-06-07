@@ -1,24 +1,27 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
-const user = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
     minlength: [2, "Name must be at least 2 characters long"],
     maxlength: [30, "Name cannot exceed 30 characters"],
-    default: "Elise Bouer", // Set default value for name field
+    role: {
+      type: String,
+      default: "Elise Bouer", // Set default value for role field
+    },
   },
   avatar: {
     type: String,
     required: [true, "Avatar is required"],
+    default:
+      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Elise.png", // Set default value for avatar field
     validate: {
       validator: (value) => validator.isURL(value),
       message: "You must enter a valid URL",
     },
-    default:
-      "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Elise.png", // Set default value for avatar field
   },
   email: {
     type: String,
@@ -36,25 +39,22 @@ const user = new mongoose.Schema({
   },
 });
 
-user.statics.findUserByCredentials = function findUserByCredentials(
-  email,
-  password
-) {
+userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
     .select("+password")
-    .then((user) => {
-      if (!user) {
+    .then((endUser) => {
+      if (!endUser) {
         return Promise.reject(new Error("Incorrect email or password"));
       }
 
-      return bcrypt.compare(password, user.password).then((isMatch) => {
+      return bcrypt.compare(password, endUser.password).then((isMatch) => {
         if (!isMatch) {
           return Promise.reject(new Error("Incorrect email or password"));
         }
 
-        return user;
+        return endUser;
       });
     });
 };
 
-module.exports = mongoose.model("user", user);
+module.exports = mongoose.model("User", userSchema);
