@@ -26,17 +26,20 @@ const handleError = (error, res) => {
   } else if (error.statusCode === errorStatusCodes.notFound) {
     res.status(errorStatusCodes.notFound).send({ message: "Item not found" });
   } else if (error.code === errorStatusCodes.mongoError) {
-    res
-      .status(errorStatusCodes.conflict)
-      .send({
-        message:
-          "Email address is already being used, please try another email.",
-      });
+    res.status(errorStatusCodes.conflict).send({
+      message: "Email address is already being used, please try another email.",
+    });
   } else {
     res
       .status(errorStatusCodes.internalServerError)
       .send({ message: "Something went wrong" });
   }
+};
+
+module.exports = {
+  errorStatusCodes,
+  handleOnFailError,
+  handleError,
 };
 
 // const ERROR_400 = 400;
