@@ -1,46 +1,46 @@
 const ClothingItem = require("../models/clothingItem");
 const { ERROR_400, ERROR_404, ERROR_500 } = require("../utils/errors");
 
-function handleRegularItemError(req, res, err) {
-  console.error(err);
-  if (err.name === "ValidationError" || err.name === "AssertionError") {
-    return res.status(ERROR_400).send({
-      message:
-        "Invalid data passed to the methods for creating an item or updating an item, or invalid ID passed to the params.",
-    });
-  }
-  if (err.name === "CastError") {
-    return res.status(ERROR_400).send({
-      message:
-        "Invalid ID passed to the params. There is no clothing item with the requested id, or the request was sent to a non-existent address.",
-    });
-  }
-  return res
-    .status(ERROR_500)
-    .send({ message: "An error has occurred on the server" });
-}
+// function handleRegularItemError(req, res, err) {
+//   console.error(err);
+//   if (err.name === "ValidationError" || err.name === "AssertionError") {
+//     return res.status(ERROR_400).send({
+//       message:
+//         "Invalid data passed to the methods for creating an item or updating an item, or invalid ID passed to the params.",
+//     });
+//   }
+//   if (err.name === "CastError") {
+//     return res.status(ERROR_400).send({
+//       message:
+//         "Invalid ID passed to the params. There is no clothing item with the requested id, or the request was sent to a non-existent address.",
+//     });
+//   }
+//   return res
+//     .status(ERROR_500)
+//     .send({ message: "An error has occurred on the server" });
+// }
 
-function handleFindByIdItemError(req, res, err) {
-  if (
-    err.name === "CastError" ||
-    err.name === "ValidationError" ||
-    err.name === "AssertionError"
-  ) {
-    return res.status(ERROR_400).send({
-      message:
-        "Invalid data passed to the methods for creating an item or updating an item, or invalid ID passed to the params.",
-    });
-  }
-  if (err.name === "DocumentNotFoundError") {
-    return res.status(ERROR_404).send({
-      message:
-        "There is no clothing item with the requested id, or the request was sent to a non-existent address.",
-    });
-  }
-  return res
-    .status(ERROR_500)
-    .send({ message: "An error has occurred on the server" });
-}
+// function handleFindByIdItemError(req, res, err) {
+//   if (
+//     err.name === "CastError" ||
+//     err.name === "ValidationError" ||
+//     err.name === "AssertionError"
+//   ) {
+//     return res.status(ERROR_400).send({
+//       message:
+//         "Invalid data passed to the methods for creating an item or updating an item, or invalid ID passed to the params.",
+//     });
+//   }
+//   if (err.name === "DocumentNotFoundError") {
+//     return res.status(ERROR_404).send({
+//       message:
+//         "There is no clothing item with the requested id, or the request was sent to a non-existent address.",
+//     });
+//   }
+//   return res
+//     .status(ERROR_500)
+//     .send({ message: "An error has occurred on the server" });
+// }
 
 const createItem = (req, res) => {
   console.log("HERE", req.body.imageUrl);
@@ -76,19 +76,19 @@ const updateItem = (req, res) => {
     });
 };
 
-const deleteItem = (req, res) => {
-  const { itemId } = req.params;
-  console.log("HERE", req.params.itemId);
+// const deleteItem = (req, res) => {
+//   const { itemId } = req.params;
+//   console.log("HERE", req.params.itemId);
 
-  ClothingItem.findByIdAndDelete(itemId)
-    .orFail()
-    .then(() =>
-      res.send({ message: `The item has been successfully deleted.` })
-    )
-    .catch((err) => {
-      handleFindByIdItemError(req, res, err);
-    });
-};
+//   ClothingItem.findByIdAndDelete(itemId)
+//     .orFail()
+//     .then(() =>
+//       res.send({ message: `The item has been successfully deleted.` })
+//     )
+//     .catch((err) => {
+//       handleFindByIdItemError(req, res, err);
+//     });
+// };
 
 const likeItem = (req, res) => {
   ClothingItem.findByIdAndUpdate(
