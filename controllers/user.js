@@ -60,7 +60,7 @@ const login = (req, res) => {
       .send({ message: "You are not authorized to do this" });
   }
 
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -96,9 +96,7 @@ module.exports = {
 
 //   bcrypt
 //     .hash(password, 10)
-//     .then((hash) => {
-//       return User.create({ name, avatar, email, password: hash });
-//     })
+//     .then((hash) => User.create({ name, avatar, email, password: hash }))
 //     .then((user) => {
 //       const userData = user.toObject();
 //       delete userData.password;
