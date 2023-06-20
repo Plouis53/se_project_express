@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Name is required"],
     minlength: [2, "Name must be at least 2 characters long"],
-    maxlength: [30, "Name cannot exceed 30 characters"],
+    maxlength: [300, "Name cannot exceed 30 characters"],
     role: {
       type: String,
       default: "Elise Bouer", // Set default value for role field

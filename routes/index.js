@@ -4,12 +4,12 @@ const clothingItem = require("./clothingitem");
 const { errorStatusCodes } = require("../utils/errors");
 
 const { login, createUser } = require("../controllers/user");
-
-router.use("/items", clothingItem);
-router.use("/users", User);
-
 router.post("/signin", login);
 router.post("/signup", createUser);
+
+//auth middleware
+router.use("/items", clothingItem);
+router.use("/users", User);
 
 router.use((req, res) => {
   res.status(errorStatusCodes.notFound).send({

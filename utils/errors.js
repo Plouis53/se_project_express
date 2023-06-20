@@ -15,6 +15,7 @@ const handleOnFailError = () => {
 };
 
 const handleErrorResponse = (err, res) => {
+  console.log(err);
   if (err.name === "ValidationError" || err.name === "CastError") {
     res
       .status(errorStatusCodes.badRequest)
