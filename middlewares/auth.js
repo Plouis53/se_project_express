@@ -21,7 +21,7 @@ module.exports.authorization = (req, res, next) => {
     } catch (err) {
       res
         .status(errorStatusCodes.unauthorized)
-        .send({ message: "Unauthorized" });
+        .send({ message: "Unauthorized, invalid token" });
       return;
     }
 
