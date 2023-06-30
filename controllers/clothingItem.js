@@ -81,8 +81,8 @@ const likeItem = (req, res) => {
     { new: true }
   )
     .orFail(handleOnFailError)
-    .then((updatedClothingitem) => {
-      res.send(updatedClothingitem);
+    .then((updatedClothingItem) => {
+      res.send(updatedClothingItem);
     })
     .catch((err) => {
       handleErrorResponse(err, res);
