@@ -5,7 +5,19 @@ const {
   errorStatusCodes,
 } = require("../utils/errors");
 
-const createItem = (req, res) => {
+// 7/10/23const createItem = (req, res) => {
+//   const { name, weather, imageUrl } = req.body;
+
+//   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
+//     .then((item) => {
+//       res.send({ data: item });
+//     })
+//     .catch((err) => {
+//       handleErrorResponse(err, res);
+//     });
+// };
+
+const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
 
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
@@ -13,7 +25,7 @@ const createItem = (req, res) => {
       res.send({ data: item });
     })
     .catch((err) => {
-      handleErrorResponse(err, res);
+      next(err); // Pass the error to the next middleware (error handler)
     });
 };
 
