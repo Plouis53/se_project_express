@@ -20,7 +20,9 @@ const validateCreatedItem = celebrate({
       "string.empty": 'The "imageUrl" field must be filled in',
       "string.uri": 'The "imageUrl" field must be a valid URL',
     }),
-    weather: Joi.string().valid("hot", "warm", "cold"),
+    weather: Joi.string().required().valid("hot", "warm", "cold").messages({
+      "string.empty": 'The "weather" field must be filled in',
+    }),
   }),
 });
 
@@ -63,9 +65,15 @@ const validateAuthentication = celebrate({
 
 const validateID = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().length(24).hex().messages({
-      "string.length": "The ID field must be 24 characters long",
-      "string.hex": "The ID field must be a hexadecimal value",
+    itemId: Joi.string().length(24).hex().required().messages({
+      "string.length": "The itemId parameter must be 24 characters long",
+      "string.hex": "The itemId parameter must be a hexadecimal value",
+      "any.required": "The itemId parameter is required",
+    }),
+    userId: Joi.string().length(24).hex().required().messages({
+      "string.length": "The userId parameter must be 24 characters long",
+      "string.hex": "The userId parameter must be a hexadecimal value",
+      "any.required": "The userId parameter is required",
     }),
   }),
 });
