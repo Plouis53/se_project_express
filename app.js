@@ -22,6 +22,7 @@ app.use(requestLogger);
 // our routes
 app.use(routes);
 
+// enabling the error logger
 app.use(errorLogger);
 
 // celebrate error handler
