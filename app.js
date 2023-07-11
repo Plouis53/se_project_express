@@ -18,18 +18,12 @@ app.use(express.json());
 app.use(cors());
 
 app.use(requestLogger);
+app.use(routes); // our routes
 
-// our routes
-app.use(routes);
+app.use(errorLogger); // enabling the error logger
 
-// enabling the error logger
-app.use(errorLogger);
-
-// celebrate error handler
-app.use(errors());
-
-// our centralized handler
-app.use(errorHandler);
+app.use(errors()); // celebrate error handler
+app.use(errorHandler); // our centralized handler
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
