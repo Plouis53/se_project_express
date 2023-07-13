@@ -18,8 +18,14 @@ app.use(express.json());
 app.use(cors());
 
 app.use(requestLogger);
-app.use(routes); // our routes
 
+app.get("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
+app.use(routes); // our routes
 app.use(errorLogger); // enabling the error logger
 
 app.use(errors()); // celebrate error handler
