@@ -26,7 +26,7 @@ const validateCreatedItem = celebrate({
   }),
 });
 
-const validateUserInfo = celebrate({
+const validateCreatedUserInfo = celebrate({ //
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30).messages({
       "string.min": 'The minimum length of the "name" field is 2',
@@ -50,7 +50,7 @@ const validateUserInfo = celebrate({
   }),
 });
 
-const validateAuthentication = celebrate({
+const validateLogin = celebrate({ //
   body: Joi.object().keys({
     email: Joi.string().required().email().messages({
       "string.empty": 'The "email" field must be filled in',
@@ -80,7 +80,7 @@ const validateID = celebrate({
 
 module.exports = {
   validateCreatedItem,
-  validateUserInfo,
-  validateAuthentication,
+  validateCreatedUserInfo,
+  validateLogin,
   validateID,
 };
