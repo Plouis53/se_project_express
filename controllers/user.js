@@ -2,40 +2,104 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { JWT_SECRET } = require("../utils/config");
-const {
-  handleOnFailError,
-  handleErrorResponse,
-  errorStatusCodes,
-} = require("../utils/errors");
+const { handleOnFailError } = require("../utils/errors");
+const { UnauthorizedError } = require("../errors/unauthorized-error");
+const { ConflictError } = require("../errors/conflict-error");
+const { BadRequestError } = require("../errors/bad-request-error");
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
-  console.log(name, avatar, email, password);
+
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ name, avatar, email, password: hash }))
-    .then((user) => {
-      const userData = user.toObject();
-      delete userData.password;
-      res.status(201).send({ data: userData });
+    .then((hash) => {
+      User.create({ name, avatar, email, password: hash })
+        .then((user) => {
+          const userData = user.toObject();
+          delete userData.password;
+          return res.status(201).send({ data: userData });
+        })
+        .catch((err) => {
+          if (err.code === 11000) {
+            next(
+              new ConflictError("A user with the current email already exists")
+            );
+          }
+          if (err.name === "ValidationError") {
+            next(new BadRequestError("Bad request, invalid data input"));
+          }
+          next(err);
+        });
     })
     .catch((err) => {
-      handleErrorResponse(err, res);
+      next(err);
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(handleOnFailError)
-    .then((user) => {
-      res.send({ data: user });
-    })
+    .orFail(() => handleOnFailError())
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
-      handleErrorResponse(err, res);
+      if (err.name === "CastError") {
+        next(new BadRequestError("Bad request, invalid ID"));
+      } else {
+        next(err);
+      }
     });
 };
 
-const updateCurrentUser = (req, res) => {
+// const createUser = (req, res, next) => {
+//   const { name, avatar, email, password } = req.body;
+//   console.log(name, avatar, email, password);
+//   bcrypt
+//     .hash(password, 10)
+//     .then((hash) => User.create({ name, avatar, email, password: hash }))
+//     .then((user) => {
+//       const userData = user.toObject();
+//       delete userData.password;
+//       res.status(201).send({ data: userData });
+//     })
+//     .catch((err) => {
+//       if (err.code === 11000) {
+//         next(new ConflictError("A user with the current email already exists"));
+//       }
+//       if (err.name === "ValidationError") {
+//         next(new BadRequestError("Bad request, invalid data input"));
+//       }
+//       next(err);
+//     });
+//   })
+//   .catch ((err) => {
+//     next (err);
+//   });
+//  };
+
+// const getCurrentUser = (req, res, next) => {
+//   User.findById(req.user._id)
+//     .orFail(() => handleOnFailError())
+//     .then((user) => res.status(200).send({ data: user }))
+//     .catch((err) => {
+//       if (err.name === "CastError") {
+//         next(new BadRequestError("Bad request, invalid ID"));
+//       } else {
+//         next(err);
+//       }
+//     });
+// };
+
+// const getCurrentUser = (req, res, next) => {
+//   User.findById(req.user._id)
+//     .orFail(handleOnFailError)
+//     .then((user) => {
+//       res.send({ data: user });
+//     })
+//     .catch((err) => {
+//       handleErrorResponse(err, res);
+//     });
+// };
+
+const updateCurrentUser = (req, res, next) => {
   const { name, avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -44,34 +108,48 @@ const updateCurrentUser = (req, res) => {
   )
     .orFail(handleOnFailError)
     .then((user) => {
-      res.send(user);
+      res.status(200).send(user);
     })
     .catch((err) => {
-      handleErrorResponse(err, res);
+      if (err.name === "ValidationError") {
+        next(new BadRequestError("Bad request, invalid data"));
+      } else {
+        next(err);
+      }
     });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res
-      .status(errorStatusCodes.unauthorized)
-      .send({ message: "You are not authorized to do this" });
+    return next(new UnauthorizedError("You are not authorized to do this"));
+    // return res
+    //   .status(errorStatusCodes.unauthorized)
+    //   .send({ message: "You are not authorized to do this" });
   }
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
-        expiresIn: "7d",
+      res.send({
+        token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       });
-      res.send({ token });
     })
-    .catch((err) => {
-      console.log(err);
-      console.log(err.name);
-      handleErrorResponse(err, res);
+    .catch(() => {
+      next(new UnauthorizedError("Incorrect email or password"));
     });
+
+  // return User.findUserByCredentials(email, password)
+  //   .then((user) => {
+  //     const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+  //       expiresIn: "7d",
+  //     });
+  //     res.send({ token });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     console.log(err.name);
+  //     handleErrorResponse(err, res);
+  //   });
 };
 
 module.exports = {
