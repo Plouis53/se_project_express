@@ -118,9 +118,9 @@ const updateCurrentUser = (req, res, next) => {
       }
     });
 };
-console.log("my my my");
+
 const login = (req, res, next) => {
-  console.log("hey there");
+  // console.log("hey there");
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -132,7 +132,7 @@ const login = (req, res, next) => {
   }
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      console.log("hello");
+      // console.log("hello");
       res.send({
         token: jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" }),
       });

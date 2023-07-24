@@ -6,17 +6,16 @@ const { login, createUser } = require("../controllers/user");
 
 const {
   validateCreatedUserInfo,
-  // validateLogin,
+  validateLogin,
 } = require("../middlewares/validation");
 const { NotFoundError } = require("../errors/not-found-error");
 console.log("this file ran");
-router.post("/signin", login);
+router.post("/signin", validateLogin, login);
 
 router.post("/signup", validateCreatedUserInfo, createUser);
 
 //auth middleware
 router.use("/items", clothingItem);
-console.log("this file ran");
 router.use("/users", User);
 
 router.use((req, res, next) => {

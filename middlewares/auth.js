@@ -14,7 +14,6 @@ module.exports.authorization = (req, res, next) => {
 
       next(new UnauthorizedError("Authorization required"));
       return;
-      console.logs()
     }
 
     const token = authorization.replace("Bearer ", "");
