@@ -9,12 +9,14 @@ const {
   // validateLogin,
 } = require("../middlewares/validation");
 const { NotFoundError } = require("../errors/not-found-error");
-
+console.log("this file ran");
 router.post("/signin", login);
+
 router.post("/signup", validateCreatedUserInfo, createUser);
 
 //auth middleware
 router.use("/items", clothingItem);
+console.log("this file ran");
 router.use("/users", User);
 
 router.use((req, res, next) => {

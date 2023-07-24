@@ -12,7 +12,7 @@ const app = express();
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (r) => {
   console.log("Connected to the database", r);
 });
-
+console.log("ohhh my gosh!!");
 const routes = require("./routes");
 
 app.use(express.json());

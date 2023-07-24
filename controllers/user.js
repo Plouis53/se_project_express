@@ -118,7 +118,7 @@ const updateCurrentUser = (req, res, next) => {
       }
     });
 };
-
+console.log("my my my");
 const login = (req, res, next) => {
   console.log("hey there");
   const { email, password } = req.body;
