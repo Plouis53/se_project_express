@@ -10,17 +10,22 @@ const {
   disLikeItem,
 } = require("../controllers/clothingItem");
 
-// CREATE - Create a new clothing item
-router.post("/", authorization, createItem);
+const {
+  validateCreatedItem,
+  validateID,
+} = require("../middlewares/validation");
+
+//CREATE - Create a new clothing item
+router.post("/", authorization, validateCreatedItem, createItem);
 
 // READ - Get all clothing items
 router.get("/", getItems);
 
 // UPDATE - Like an item
-router.put("/:itemId/likes", authorization, likeItem);
+router.put("/:itemId/likes", authorization, validateID, likeItem);
 
 // UPDATE - Update an item
-router.put("/:itemId", authorization, updateItem);
+router.put("/:itemId", authorization, validateID, updateItem);
 
 // DELETE - Delete a clothing item by ID
 router.delete("/:itemId", authorization, deleteItem);
