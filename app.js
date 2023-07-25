@@ -33,6 +33,7 @@ app.use(errors()); // celebrate error handler
 app.use(errorHandler); // our centralized handler
 
 app.listen(PORT, () => {
+  console.log("hello");
   console.log(`App listening at port ${PORT}`);
   console.log("Working");
 });
