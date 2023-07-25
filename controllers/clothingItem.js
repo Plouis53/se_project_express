@@ -110,7 +110,7 @@ const likeItem = (req, res, next) => {
   // const { itemId } = req.params;
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
-    { $addToSet: { likes: req.user._id } },
+    { $addToSet: { likes: req.body.userId } },
     { new: true }
   )
     .then((item) => {
