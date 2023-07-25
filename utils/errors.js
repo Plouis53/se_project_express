@@ -24,7 +24,7 @@ const handleErrorResponse = (err, res) => {
     res
       .status(errorStatusCodes.unauthorized)
       .send({ message: "You are not authorized to do this" });
-  } else if (err.statusCode === errorStatusCodes.badRequest) {
+  } else if (err.statusCode === errorStatusCodes.notFound) {
     res.status(errorStatusCodes.notFound).send({ message: "Item not found" });
   } else if (err.code === errorStatusCodes.mongoError) {
     res.status(errorStatusCodes.conflict).send({
