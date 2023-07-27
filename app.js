@@ -8,10 +8,19 @@ const { requestLogger, errorLogger } = require("./middlewares/logger");
 const { PORT = 3001 } = process.env;
 const app = express();
 
-mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (r) => {
-  console.log("Connected to the database", r);
+// mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (r) => {
+//   console.log("Connected to the database", r);
+// });
+// console.log("ohhh my gosh!!");
+
+mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db", (error) => {
+  if (error) {
+    console.error("Error connecting to the database:", error);
+  } else {
+    console.log("Connected to the database");
+  }
 });
-console.log("ohhh my gosh!!");
+
 const routes = require("./routes");
 
 app.use(express.json());
@@ -24,6 +33,8 @@ app.use(requestLogger);
 //     throw new Error("Server will crash now");
 //   }, 0);
 // });
+
+const { JWT_SECRET } = process.env;
 
 app.use(routes); // our routes
 app.use(errorLogger); // enabling the error logger

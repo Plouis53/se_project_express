@@ -42,7 +42,7 @@ const getItems = (req, res, next) => {
     .sort({ createdAt: -1 })
     .then((items) => res.status(200).send({ data: items }))
     .catch((err) => {
-      next(err, res);
+      next(err);
     });
 };
 
