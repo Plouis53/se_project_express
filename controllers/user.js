@@ -6,8 +6,7 @@ const { handleOnFailError } = require("../utils/errors");
 const { UnauthorizedError } = require("../errors/unauthorized-error");
 const { ConflictError } = require("../errors/conflict-error");
 const { BadRequestError } = require("../errors/bad-request-error");
-
-
+const { NotFoundError } = require("../errors/not-found-error");
 
 const createUser = (req, res, next) => {
   const { name, avatar, email, password } = req.body;
@@ -40,7 +39,7 @@ const createUser = (req, res, next) => {
 
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
-    .orFail(() => handleOnFailError())
+    .orFail(() => new NotFoundError("Not found"))
     .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === "CastError") {
@@ -50,6 +49,19 @@ const getCurrentUser = (req, res, next) => {
       }
     });
 };
+
+// 7/27/23 const getCurrentUser = (req, res, next) => {
+//   User.findById(req.user._id)
+//     .orFail(() => handleOnFailError())
+//     .then((user) => res.status(200).send({ data: user }))
+//     .catch((err) => {
+//       if (err.name === "CastError") {
+//         next(new BadRequestError("Bad request, invalid ID"));
+//       } else {
+//         next(err);
+//       }
+//     });
+// };
 
 // const createUser = (req, res, next) => {
 //   const { name, avatar, email, password } = req.body;
