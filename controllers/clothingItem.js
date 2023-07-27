@@ -9,18 +9,6 @@ const { ForbiddenError } = require("../errors/forbidden-error");
 //   errorStatusCodes,
 // } = require("../utils/errors");
 
-// 7/10/23const createItem = (req, res) => {
-//   const { name, weather, imageUrl } = req.body;
-
-//   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
-//     .then((item) => {
-//       res.send({ data: item });
-//     })
-//     .catch((err) => {
-//       handleErrorResponse(err, res);
-//     });
-// };
-
 const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
 
