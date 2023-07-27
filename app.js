@@ -29,8 +29,6 @@ app.use(requestLogger);
 //   }, 0);
 // });
 
-const { JWT_SECRET } = process.env;
-
 app.use(routes); // our routes
 app.use(errorLogger); // enabling the error logger
 
