@@ -4,7 +4,7 @@ The back-end project is focused on creating a server for the WTWR application. Y
 
 ## Links
 
-- [WTWR Website Link](https://styleguide.mooo.com/)
+- [WTWR Website Link](https://styleguide.mooo.com)
 - [Backend Repo Link](https://api.styleguide.mooo.com)
 
 ## Functionality
