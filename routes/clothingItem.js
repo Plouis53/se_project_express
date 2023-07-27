@@ -28,9 +28,9 @@ router.put("/:itemId/likes", authorization, validateID, likeItem);
 router.put("/:itemId", authorization, validateID, updateItem);
 
 // DELETE - Delete a clothing item by ID
-router.delete("/:itemId", authorization, deleteItem);
+router.delete("/:itemId", authorization, validateID, deleteItem);
 
 // DELETE - Unlike an item
-router.delete("/:itemId/likes", authorization, disLikeItem);
+router.delete("/:itemId/likes", authorization, validateID, disLikeItem);
 
 module.exports = router;
