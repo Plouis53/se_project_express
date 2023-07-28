@@ -1,12 +1,12 @@
-const errorStatusCodes = {
-  badRequest: 400,
-  unauthorized: 401,
-  forbidden: 403,
-  notFound: 404,
-  conflict: 409,
-  internalServerError: 500,
-  mongoError: 11000,
-};
+// const errorStatusCodes = {
+//   badRequest: 400,
+//   unauthorized: 401,
+//   forbidden: 403,
+//   notFound: 404,
+//   conflict: 409,
+//   internalServerError: 500,
+//   mongoError: 11000,
+// };
 
 // const handleOnFailError = () => {
 //   const error = new Error("No item found");
