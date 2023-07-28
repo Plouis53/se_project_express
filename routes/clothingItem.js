@@ -15,7 +15,7 @@ const {
   validateID,
 } = require("../middlewares/validation");
 
-//CREATE - Create a new clothing item
+// CREATE - Create a new clothing item
 router.post("/", authorization, validateCreatedItem, createItem);
 
 // READ - Get all clothing items

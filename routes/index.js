@@ -12,7 +12,7 @@ const { NotFoundError } = require("../errors/not-found-error");
 router.post("/signin", validateLogin, login);
 router.post("/signup", validateCreatedUserInfo, createUser);
 
-//auth middleware
+// auth middleware
 router.use("/items", clothingItem);
 router.use("/users", User);
 
