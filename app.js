@@ -2,8 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const { errors } = require("celebrate"); // Import celebrate before error-handler
 const errorHandler = require("./middlewares/error-handler");
-const { errors } = require("celebrate"); // what are you talking about? I am not getting any errors on my end. 
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const { PORT = 3001 } = process.env;
@@ -24,16 +24,10 @@ app.use(cors());
 
 app.use(requestLogger);
 
-// app.get("/crash-test", () => {
-//   setTimeout(() => {
-//     throw new Error("Server will crash now");
-//   }, 0);
-// });
-
 app.use(routes); // our routes
 app.use(errorLogger); // enabling the error logger
 
-app.use(errors()); // celebrate error handler
+app.use(errors()); // celebrate error handler should be used before error-handler
 app.use(errorHandler); // our centralized handler
 
 app.listen(PORT, () => {
