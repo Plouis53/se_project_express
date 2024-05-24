@@ -20,6 +20,7 @@ const createUser = (req, res, next) => {
           return res.status(201).send({ data: userData });
         })
         .catch((err) => {
+          console.error(err);
           if (err.code === 11000) {
             next(
               new ConflictError("A user with the current email already exists")
@@ -32,6 +33,7 @@ const createUser = (req, res, next) => {
         });
     })
     .catch((err) => {
+      console.error(err);
       next(err);
     });
 };
